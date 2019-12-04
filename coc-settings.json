@@ -1,0 +1,10 @@
+{
+    "diagnostic.virtualText": true,
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "suggest.snippetIndicator": "►",
+    "python.linting.flake8Path": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/flake8",
+    "python.sortImports.path": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/isort",
+    "python.formatting.yapfPath": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/yapf",
+    "python.formatting.provider": "yapf",
+    "python.jediEnabled": false
+}
