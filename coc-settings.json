@@ -1,10 +1,14 @@
 {
     "diagnostic.virtualText": true,
     "java.errors.incompleteClasspath.severity": "ignore",
+    "java.jdt.ls.vmargs": "-javaagent:/Users/joey/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar -Xbootclasspath/a:/Users/joey/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar",
     "suggest.snippetIndicator": "►",
     "python.linting.flake8Path": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/flake8",
     "python.sortImports.path": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/isort",
     "python.formatting.yapfPath": "/Users/joey/.local/share/pyenv/versions/neovim3/bin/yapf",
     "python.formatting.provider": "yapf",
-    "python.jediEnabled": false
+    "python.jediEnabled": false,
+    "coc.preferences.formatOnSaveFiletypes": ["python"]
+    "clangd.path": "/Users/joey/.config/coc/extensions/coc-clangd-data/install/10.0.0/clangd_10.0.0/bin/clangd",
+    "clangd.semanticHighlighting": true,
 }

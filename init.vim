@@ -99,7 +99,7 @@
 
 " ui configuration {{{
   set termguicolors
-  set diffopt=filler,vertical,iwhite
+  set diffopt+=vertical,iwhite,algorithm:patience
   set completeopt=menu
   set signcolumn=yes                                  "always show signcolumns
   set laststatus=2                                    "must set for airline
@@ -116,6 +116,9 @@
   if has('nvim')
     set icm=split
   else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     set nocompatible
     set autoindent
     set autoread
@@ -158,12 +161,14 @@
         \ 1 == winnr('$') ? ":CtrlSpace cq\<CR>" :
         \ ":close\<CR>"
     "}}}
+    if has('nvim')
+      Plug 'nvim-treesitter/nvim-treesitter'
+    endif
     Plug 'tpope/vim-dispatch'
     Plug 'tpope/vim-eunuch'
     Plug 'vifm/vifm.vim' "{{{
      nnoremap - :Vifm<CR>
     "}}}
-    " Plug 'justinmk/vim-dirvish'
     Plug 'vim-airline/vim-airline' "{{{
       let g:airline#extensions#tabline#enabled = 1
       let g:airline#extensions#tagbar#enabled = 0
@@ -183,9 +188,6 @@
       " Send current line, 2gxx to send two lines
       nmap gxx <Plug>(neoterm-repl-send-line)
     "}}}
-  "}}}
-  "{{{ Ansible
-    Plug 'pearofducks/ansible-vim', { 'do': 'cd ./UltiSnips; ./generate.py' }
   "}}}
   "{{{ web
     Plug 'othree/html5.vim', { 'for': ['html', 'htmldjango'] }
@@ -207,11 +209,16 @@
   "{{{ java
     Plug 'vim-jp/vim-java', { 'for': 'java' }  " java syntax fix
   "}}}
+  "{{{ C
+    " nvim uses treesitter
+    if !has('nvim')
+      Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': ['cpp', 'c'] }
+    endif
+  "}}}
   "{{{ markdown
     Plug 'jtratner/vim-flavored-markdown', { 'for': 'markdown' }
   "}}}
   "{{{ scm
-    Plug 'chrisbra/vim-diff-enhanced', { 'on': 'EnhancedDiff' }
     Plug 'mhinz/vim-signify' "{{{
       let g:signify_update_on_bufenter=0
     "}}}
@@ -233,7 +240,7 @@
     "}}}
   "}}}
   "{{{ autocomplete
-    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}} "{{{
+    Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
       " Use tab for trigger completion with characters ahead and navigate.
       " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
       inoremap <silent><expr> <TAB>
@@ -290,6 +297,8 @@
       nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
       " Resume latest coc list
       nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
+      " Switch header and source in c like language
+      nnoremap <silent> <leader>o   :<C-u>CocCommand clangd.switchSourceHeader<CR>
 
       " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
       vmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -317,11 +326,6 @@
     Plug 'tommcdo/vim-exchange'
     Plug 'kshenoy/vim-signature'
     Plug 'jiangmiao/auto-pairs'
-    Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] } "{{{
-      nnoremap <leader>gg :Grepper<cr>
-      nmap gs  <plug>(GrepperOperator)
-      xmap gs  <plug>(GrepperOperator)
-    "}}}
   "}}}
   "{{{ navigation
     Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install --all' } "{{{
@@ -332,7 +336,7 @@
       nnoremap <leader>t :BTags<cr>
       nnoremap <leader>T :Tags<cr>
       nmap <leader>ag :Ag<space>
-      nmap <leader>aw :Ag <C-r><C-w>
+      nmap <leader>aw :Ag <C-r><C-w><CR>
       vmap <leader>aw y:Ag <C-r>0<CR>
     "}}}
     Plug 'justinmk/vim-sneak' "{{{
@@ -347,29 +351,21 @@
     Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "{{{
       let g:undotree_WindowLayout='botright'
       let g:undotree_SetFocusWhenToggle=1
-      nnoremap <silent> <F5> :UndotreeToggle<CR>
     "}}}
     Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
-      nnoremap <silent> <F9> :TagbarToggle<CR>
+      nnoremap <silent> <F7> :TagbarToggle<CR>
     "}}}
   "}}}
   "{{{ textobj
      Plug 'wellle/targets.vim'
   "}}}
   "{{{ applications
-    Plug 'gu-fan/riv.vim' "{{{
-      let g:instant_rst_slow = 1
-      let g:instant_rst_bind_scroll = 0
-    "}}}
-    Plug 'Rykka/InstantRst'
-    Plug 'baverman/vial'
-    Plug 'baverman/vial-http' "{{{
-      let g:vial_python = 'python3'
+    Plug 'puremourning/vimspector' "{{{
+      let g:vimspector_enable_mappings = 'HUMAN'
     "}}}
   "}}}
   "{{{ misc
-    Plug 'zenbro/mirror.vim'
-    Plug 'tpope/vim-scriptease', { 'for': 'vim' }
+    Plug 'psliwka/vim-smoothie'
     Plug 'Shougo/echodoc.vim' "{{{
       let g:echodoc_enable_at_startup = 1
     "}}}
@@ -384,8 +380,8 @@
     endif "}}}
   "}}}
   " color schemes {{{
-    Plug 'joshdick/onedark.vim'
-    Plug 'cocopon/iceberg.vim'
+    Plug 'sainnhe/edge'
+    Plug 'sainnhe/gruvbox-material'
     Plug 'arcticicestudio/nord-vim' "{{{
       let g:nord_italic = 1
       let g:nord_underline = 1
@@ -394,6 +390,12 @@
     "}}}
   "}}}
   call plug#end()
+"}}}
+
+"lua configurations {{{
+if has('nvim')
+  luafile ~/.config/nvim/treesitter.lua
+endif
 "}}}
 
 " mappings {{{
@@ -450,11 +452,6 @@
   " reselect last paste
   nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
-  " find current word in quickfix
-  nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
-  " find last search in quickfix
-  nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
-
   " shortcuts for windows {{{
     nnoremap <leader>v <C-w>v<C-w>l
     nnoremap <leader>s <C-w>s
@@ -470,9 +467,6 @@
 
   " quick switch to last buffer
   map <leader><TAB> <C-^>
-
-  " hide annoying quit message
-  " nnoremap <C-c> <C-c>:echo<cr>
 
   " quick refactor
   vmap zz   V<Esc>gvygvgc`>p
@@ -501,13 +495,15 @@
     autocmd! FileType ghmarkdown setlocal nolist textwidth=80 formatoptions+=t
     autocmd! BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
     autocmd! FileType vim setlocal fdm=indent keywordprg=:help
+    autocmd! FileType cpp setlocal tabstop=2 softtabstop=2 shiftwidth=2
   augroup END
 "}}}
 
 " finish loading {{{
   filetype plugin indent on
   try
-      colorscheme nord
+      let g:edge_style = 'neon'
+      colorscheme edge
   catch /^Vim\%((\a\+)\)\=:E185/
       colorscheme default
   endtry
