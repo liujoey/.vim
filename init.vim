@@ -166,8 +166,9 @@
     endif
     Plug 'tpope/vim-dispatch'
     Plug 'tpope/vim-eunuch'
-    Plug 'vifm/vifm.vim' "{{{
-     nnoremap - :Vifm<CR>
+    Plug 'kevinhwang91/rnvimr' "{{{
+      nnoremap - :RnvimrToggle<CR>
+      let g:rnvimr_enable_ex = 1
     "}}}
     Plug 'vim-airline/vim-airline' "{{{
       let g:airline#extensions#tabline#enabled = 1
@@ -328,16 +329,21 @@
     Plug 'jiangmiao/auto-pairs'
   "}}}
   "{{{ navigation
-    Plug 'junegunn/fzf.vim' | Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install --all' } "{{{
-      map <leader><leader> :FZF<CR>
-      nnoremap <leader>b :Buffers<cr>
-      nnoremap <leader>l :BLines<cr>
-      nnoremap <leader>L :Lines<cr>
-      nnoremap <leader>t :BTags<cr>
-      nnoremap <leader>T :Tags<cr>
-      nmap <leader>ag :Ag<space>
-      nmap <leader>aw :Ag <C-r><C-w><CR>
-      vmap <leader>aw y:Ag <C-r>0<CR>
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install --all' } "{{{
+      let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+      let g:fzf_preview_filelist_command = '(fd --type f) 2> /dev/null'
+      let g:fzf_preview_git_status_preview_command = "[[ $(git diff --cached -- {-1}) != \"\" ]] && git diff --cached -- {-1} | delta --file-style=omit | sed 1d || " .
+\ "[[ $(git diff -- {-1}) != \"\" ]] && git diff -- {-1} | delta --file-style=omit | sed 1d || " .
+\ g:fzf_preview_command
+      map <leader><leader> :<C-u>CocCommand fzf-preview.ProjectFiles<CR>
+      nnoremap <leader>b :<C-u>CocCommand fzf-preview.Buffers<cr>
+      nnoremap <leader>l :<C-u>CocCommand fzf-preview.BufferLines<cr>
+      nnoremap <leader>L :<C-u>CocCommand fzf-preview.Lines<cr>
+      nnoremap <leader>t :<C-u>CocCommand fzf-preview.BufferTags<cr>
+      nnoremap <leader>T :<C-u>CocCommand fzf-preview.Ctags<cr>
+      nmap <leader>ag :<C-u>CocCommand fzf-preview.ProjectGrep<space>
+      nmap <leader>aw :<C-u>CocCommand fzf-preview.ProjectGrep <C-r><C-w><CR>
+      vmap <leader>aw y:<C-u>CocCommand fzf-preview.ProjectGrep <C-r>0<CR>
     "}}}
     Plug 'justinmk/vim-sneak' "{{{
       let g:sneak#streak = 1
